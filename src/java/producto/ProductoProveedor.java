@@ -5,9 +5,16 @@
  */
 package producto;
 
+import com.sun.xml.bind.v2.schemagen.xmlschema.List;
+import controladores.ProductosJpaController;
+import controladores.ProveedoresJpaController;
+import entidades.Productos;
+import entidades.Proveedores;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -17,46 +24,47 @@ import javax.jws.WebParam;
 public class ProductoProveedor {
 
     /**
-     * This is a sample web service operation
+     * Web service operation
      */
-    @WebMethod(operationName = "hello")
-    public String hello(@WebParam(name = "name") String txt) {
-        return "Hello " + txt + " !";
+    @WebMethod(operationName = "getProveedores")
+    public java.util.List getProveedores() {
+        //TODO write your implementation code here:
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemostracionSOAPPU");
+        ProveedoresJpaController controladorP = new ProveedoresJpaController(emf);
+        return controladorP.findProveedoresEntities();
     }
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "getProductos")
-    public String getProductos(@WebParam(name = "proveedorID") int proveedorID) {
+    public java.util.List getProductos() {
         //TODO write your implementation code here:
-        return null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemostracionSOAPPU");
+        ProductosJpaController controladorP = new ProductosJpaController(emf);
+        return controladorP.findProductosEntities();
     }
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "getProducto")
-    public String getProducto(@WebParam(name = "productoID") int productoID) {
+    public Productos getProducto(@WebParam(name = "id") int id) {
         //TODO write your implementation code here:
-        return null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemostracionSOAPPU");
+        ProductosJpaController controladorP = new ProductosJpaController(emf);
+        return controladorP.findProductos(id);
     }
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "getProveedor")
-    public String getProveedor(@WebParam(name = "proveedorID") int proveedorID) {
+    public Proveedores getProveedor(@WebParam(name = "id") int id) {
         //TODO write your implementation code here:
-        return null;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("DemostracionSOAPPU");
+        ProveedoresJpaController controladorP = new ProveedoresJpaController(emf);
+        return controladorP.findProveedores(id);
     }
 
-    /**
-     * Web service operation
-     */
-    @WebMethod(operationName = "getProveedores")
-    public String getProveedores() {
-        //TODO write your implementation code here:
-        return null;
-    }
 }
