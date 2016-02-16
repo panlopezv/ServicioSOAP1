@@ -39,20 +39,13 @@ public class ProveedoresJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Proveedores proveedores) throws RollbackFailureException, Exception {
+    public void create(Proveedores proveedor) {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
-            em.persist(proveedores);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            throw ex;
+            em.getTransaction().begin();
+            em.persist(proveedor);
+            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();

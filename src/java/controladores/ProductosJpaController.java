@@ -11,6 +11,7 @@ import controladores.exceptions.RollbackFailureException;
 import entidades.Productos;
 import java.io.Serializable;
 import java.util.List;
+import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -40,23 +41,13 @@ public class ProductosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Productos productos) throws PreexistingEntityException, RollbackFailureException, Exception {
+    public void create(Productos producto) {
         EntityManager em = null;
         try {
-            utx.begin();
             em = getEntityManager();
-            em.persist(productos);
-            utx.commit();
-        } catch (Exception ex) {
-            try {
-                utx.rollback();
-            } catch (Exception re) {
-                throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
-            }
-            if (findProductos(productos.getId()) != null) {
-                throw new PreexistingEntityException("Productos " + productos + " already exists.", ex);
-            }
-            throw ex;
+            em.getTransaction().begin();
+            em.persist(producto);
+            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
